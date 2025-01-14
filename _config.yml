@@ -208,7 +208,7 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
             - | # 自定义主题色，可对应 <https://www.runoob.com/cssref/css-colornames.html> 挑选
               <style>
                 .theme-base-07 {
-                  --theme-base-color: MediumSpringGreen;
+                  --theme-base-color: Aqua;
                 }
               </style>
             - | # 一些页面优化标签，看不懂可跳过
@@ -513,9 +513,9 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
               CC BY 4.0
             </a>
             （除特别声明或转载文章外）
-            <br/>
-            #<i class="fa-solid fa-coffee fa-fw"></i>
-            #<a href="/merger/">如果这篇博客帮助到你，可以请我喝一杯咖啡~</a>
+            #<br/>
+            # <i class="fa-solid fa-coffee fa-fw"></i>
+            <a href="/merger/">如果这篇博客帮助到你，可以请我喝一杯咖啡~</a>
         #merger: # 打赏页，需要配置！
         #  append_to_head:
         #    - | # 需要配置的变量见<https://merger.justhx.com/cn/docs/configure>
