@@ -208,7 +208,7 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
             - | # 自定义主题色（水野爱蓝），可对应 <https://www.runoob.com/cssref/css-colornames.html> 挑选
               <style>
                 .theme-base-07 {
-                  --theme-base-color: DarkSlateBlue;
+                  --theme-base-color: BlueViolet;
                 }
               </style>
             - | # 一些页面优化标签，看不懂可跳过
@@ -229,7 +229,7 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
             - | # 网站小图标，可换成你自己的图片，改href中的部分即可
               <link
                 rel="apple-touch-icon-precomposed"
-                href="https://gravatar.loli.net/avatar/289efba375d63424de3c49569c446744?s=320"
+                href="https://github.com/DuneArrakis/DuneArrakis.github.io/blob/gh-pages/avatar.jpg"
               />
               <link
                 rel="shortcut
