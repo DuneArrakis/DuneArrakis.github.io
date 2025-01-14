@@ -46,8 +46,8 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
                 href: /archive/
               - title: '<i class="fa-solid fa-tags fa-fw"></i> 标签'
                 href: /tags/
-              - title: '<i class="fa-solid fa-coffee fa-fw"></i> 打赏'
-                href: /merger/
+             # - title: '<i class="fa-solid fa-coffee fa-fw"></i> 打赏'
+             #   href: /merger/
             simple_jekyll_search: # 侧边栏的全站搜索
               enable: true
               full_text_search: false # 可能导致缓慢的搜索和加载
@@ -516,40 +516,39 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
             <br/>
             <i class="fa-solid fa-coffee fa-fw"></i>
             <a href="/merger/">如果这篇博客帮助到你，可以请我喝一杯咖啡~</a>
-        merger: # 打赏页，需要配置！
-          append_to_head:
-            - | # 需要配置的变量见<https://merger.justhx.com/cn/docs/configure>
-              <script>
-                var myname = "WuK";
-                var profile = "i@wu-kan.cn";
-                var usage = "payment";
-                var wechat = "wxp://f2f0BhUoIC_9gex7-tC2PRvVuoA486mK5WyC";
-                var tenpay = "https://i.qianbao.qq.com/wallet/sqrcode.htm?m=tenpay&f=wallet&a=1&ac=CAEQ77zFwQMY-6u57gU%3D_xxx_sign&u=942759535&n=%E8%94%9A";
-                var alipay = "https://qr.alipay.com/fkx02750b5kbplxvudqrx16";
-                var paypal = "https://paypal.me/wukan0621";
-                var multilingual = false;
-                var branding = false;
-                var title = "选择你的支付方式";
-                var subtitle = "跟随进一步的指示以向" + myname + "付款";
-                var qrcodeapi = "https://www.zhihu.com/qrcode?url=";
-                var gravatar_url = "https://gravatar.loli.net/avatar/";
-              </script>
-            - |
-              <meta
-                charset="utf-8"
-              />
-              <meta
-                name="viewport"
-                content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-              />
-              <meta
-                http-equiv="Content-Security-Policy"
-                content="upgrade-insecure-requests"
-              />
-            - | # merger的页面样式
-              <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/gh/hifocus/merger@0.26.1/assets/styles/spectre.css/spectre-modified.min.css,gh/hifocus/merger@0.26.1/assets/styles/style.min.css">
-              <script defer="defer" src="https://cdn.jsdelivr.net/combine/npm/jquery@3.5.1"></script>
-              <script defer="defer" src="https://cdn.jsdelivr.net/combine/gh/lrsjng/jquery-qrcode@0.18.0/dist/jquery-qrcode.min.js,npm/blueimp-md5@2.18.0/js/md5.min.js,gh/hifocus/merger@0.26.1/assets/js/function.min.js,gh/hifocus/merger@0.26.1/assets/js/font_974919_xgtacm93vxp.min.js"></script>
+        #merger: # 打赏页，需要配置！
+        #  append_to_head:
+        #    - | # 需要配置的变量见<https://merger.justhx.com/cn/docs/configure>
+        #      <script>
+        #        var myname = "ZZT";
+        #        var profile = "https://github.com/DuneArrakis/DuneArrakis.github.io/blob/gh-pages/avatar.jpg";
+        #        var usage = "payment";
+        #        var wechat = "wxp://f2f0BhUoIC_9gex7-tC2PRvVuoA486mK5WyC";
+        #        var tenpay = "https://i.qianbao.qq.com/wallet/sqrcode.htm?m=tenpay&f=wallet&a=1&ac=CAEQ77zFwQMY-6u57gU%3D_xxx_sign&u=942759535&n=%E8%94%9A";
+        #        var alipay = "https://qr.alipay.com/fkx02750b5kbplxvudqrx16";
+        #        var multilingual = false;
+        #        var branding = false;
+        #        var title = "选择你的支付方式";
+        #        var subtitle = "跟随进一步的指示以向" + myname + "付款";
+        #        var qrcodeapi = "https://www.zhihu.com/qrcode?url=";
+        #        var gravatar_url = "https://gravatar.loli.net/avatar/";
+        #      </script>
+        #    - |
+        #      <meta
+        #        charset="utf-8"
+        #      />
+        #      <meta
+        #        name="viewport"
+        #        content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        #      />
+        #      <meta
+        #        http-equiv="Content-Security-Policy"
+        #        content="upgrade-insecure-requests"
+        #      />
+        #    - | # merger的页面样式
+        #      <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/gh/hifocus/merger@0.26.1/assets/styles/spectre.css/spectre-modified.min.css,gh/hifocus/merger@0.26.1/assets/styles/style.min.css">
+        #      <script defer="defer" src="https://cdn.jsdelivr.net/combine/npm/jquery@3.5.1"></script>
+        #      <script defer="defer" src="https://cdn.jsdelivr.net/combine/gh/lrsjng/jquery-qrcode@0.18.0/dist/jquery-qrcode.min.js,npm/blueimp-md5@2.18.0/js/md5.min.js,gh/hifocus/merger@0.26.1/assets/js/function.min.js,gh/hifocus/merger@0.26.1/assets/js/font_974919_xgtacm93vxp.min.js"></script>
         home: # 展示页的配置可跳过，详见<https://revealjs.com/>
           append_to_section_tag:
             - key: data-markdown
