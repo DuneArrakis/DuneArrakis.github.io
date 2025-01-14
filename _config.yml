@@ -160,29 +160,6 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
                     transform: rotate3d(0, 1, 0, -180deg);
                   }
                 </style>
-              - | # 不蒜子页面统计，看不懂可不改
-                <div>
-                  <div>
-                    <i class="fa-solid fa-eye fa-fw"></i>
-                    <span id="busuanzi_value_page_pv">
-                      <i class="fa-solid fa-spinner fa-pulse"></i>
-                    </span>
-                    <br/>
-                    <i class="fa-solid fa-paw fa-fw"></i>
-                    <span id="busuanzi_value_site_pv">
-                      <i class="fa-solid fa-spinner fa-pulse"></i>
-                    </span>
-                    <br/>
-                    <i class="fa-solid fa-user-friends fa-fw"></i>
-                    <span id="busuanzi_value_site_uv">
-                      <i class="fa-solid fa-spinner fa-pulse"></i>
-                    </span>
-                  </div>
-                  <script
-                    src="https://cdn.jsdelivr.net/npm/busuanzi@2.3/bsz.pure.mini.js"
-                    async="async"
-                  ></script>
-                </div>
               - | # 觉得我的主题好用的话，让更多的人知道它吧！
                 <div>
                   <i class="fa-solid fa-thumbs-up fa-fw"></i>
@@ -209,6 +186,7 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
               <style>
                 .theme-base-07 {
                   --theme-base-color: ForestGreen;
+                  --theme-base-color2: DimGray;
                 }
               </style>
             - | # 一些页面优化标签，看不懂可跳过
@@ -307,7 +285,7 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
               <style>
                 .container a,
                 .related-posts li a:hover {
-                  color: var(--theme-base-color);
+                  color: var(--theme-base-color2);
                 }
               </style>
         page:
@@ -571,7 +549,7 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
               .reveal a:hover,
               .reveal a:focus {
                 color: inherit;
-                border-bottom: 1px solid var(--theme-base-color);
+                border-bottom: 1px solid var(--theme-base-color2);
               }
             </style>
           append: |
