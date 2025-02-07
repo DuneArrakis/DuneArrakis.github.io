@@ -45,7 +45,7 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
                   #sidebar-search-input {
                     background: none;
                     border: none;
-                    color: White;
+                    color: Black;
                     width: 100%;
                   }
                   #sidebar-search-results-container {
