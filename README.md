@@ -1,6 +1,6 @@
 # 星合の空
 
-- [更严肃的自我介绍/简历](https://resume.wu-kan.cn)
+- 
 - 
 
 <!-- .slide -->
