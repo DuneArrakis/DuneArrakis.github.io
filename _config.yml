@@ -1,15 +1,15 @@
 title: ZhangZhoutao # 站点标题
 description: | # 头像背后的信息（html格式），<br/>代表换行
-  <a href="mailto:zzt@hdu.edu.cn">
+  <a href="mailto:zzt@hdu.edu.cn" style="color: black;">
     <i class="fa-solid fa-envelope"></i>
   </a>
-  <a href="https://github.com/DuneArrakis">
+  <a href="https://github.com/DuneArrakis" style="color: black;">
     <i class="fa-brands fa-github"></i>
   </a>
   <br/>
-  得香料者，得天下
+  <span style="color: black;">得香料者，得天下</span>
   <br/>
-  Power over spice is power over all.
+  <span style="color: black;">Power over spice is power over all.</span>
 baseurl: "" # 假如你的博客是建在某个目录下的，请在这里加上目录名，并且下面配置的所有链接里的`/assets`前也要加，即`/your_baseurl/assets`。这一项结尾不要有'/'。
 
 defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/front-matter-defaults/>功能进行配置
@@ -71,7 +71,7 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
                       json: "/assets/simple-jekyll-search/search.json",
                       searchInput: document.getElementById("sidebar-search-input"),
                       resultsContainer: document.getElementById("sidebar-search-results-container"),
-                      searchResultTemplate: `<li><a href="{url}">{title}</a></li>`,
+                      searchResultTemplate: `<li><a href="{url}" style="color: black;">{title}</a></li>`,
                       limit: 99,
                       fuzzy: true
                     })'
@@ -83,9 +83,13 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
                   #toc {
                     overflow: hidden hidden;
                     max-height: 66.6vh;
+                    color: black;
                   }
                   #toc:hover{
                     overflow: auto auto;
+                  }
+                  #toc a {
+                    color: black;
                   }
                 </style>
             append_to_sidebar:
@@ -96,6 +100,12 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
                   .sidebar,
                   .sidebar-toggle:active {
                     background-color: var(--theme-base-color);
+                  }
+                  .sidebar {
+                    color: black;
+                  }
+                  .sidebar a {
+                    color: black;
                   }
                 </style>
               - | # 修复点击侧边栏按钮回到顶部的问题
@@ -150,14 +160,14 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
                   }
                 </style>
               - | # 觉得我的主题好用的话，让更多的人知道它吧！
-                <div>
+                <div style="color: black;">
                   <i class="fa-solid fa-thumbs-up fa-fw"></i>
-                  <a href="https://jekyll-theme-WuK.wu-kan.cn">
+                  <a href="https://jekyll-theme-WuK.wu-kan.cn" style="color: black;">
                     jekyll-theme-WuK
                   </a>
                 </div>
               - | # Copyright声明
-                <div>
+                <div style="color: black;">
                   <i class="fa-solid fa-copyright fa-fw"></i>
                   2024-2025 Zhang.Z
                 </div>
@@ -175,7 +185,7 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
               <style>
                 .theme-base-07 {
                   --theme-base-color: Azure;
-                  --theme-base-color2: Black;
+                  --theme-base-color2: DimGray;
                 }
               </style>
             - | # 一些页面优化标签，看不懂可跳过
