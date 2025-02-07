@@ -175,7 +175,7 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
               <style>
                 .theme-base-07 {
                   --theme-base-color: Azure;
-                  --theme-base-color2: DimGray;
+                  --theme-base-color2: Black;
                 }
               </style>
             - | # 一些页面优化标签，看不懂可跳过
