@@ -17,3 +17,5 @@
 <!-- .slide vertical=true -->
 
 ## 实用工具
+
+- [markdown语法](https://dune-arrakis.cn/2025/02/08/markdown%E8%AF%AD%E6%B3%95/)
