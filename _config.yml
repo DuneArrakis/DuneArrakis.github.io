@@ -286,6 +286,9 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
                 .related-posts li a:hover {
                   color: var(--theme-base-color2);
                 }
+                .container a:hover {
+                  color: blue;
+                }
               </style>
         page:
           title: # 为每个页面自动生成一个 H1 title
