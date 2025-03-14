@@ -1,1 +1,1 @@
-start D:\Git\git-bash.exe --cd=E:\github\DuneArrakis.github.io
+start D:\Git\git-bash.exe --cd=E:\github\DuneArrakis.github.io && git add . && git commit -a -m "添加内容" && git push
