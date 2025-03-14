@@ -1,4 +1,7 @@
 @echo off
+
+chcp 65001
+
 set "GIT_BASH_PATH=D:\Git\git-bash.exe"
 set "PROJECT_PATH=E:\github\DuneArrakis.github.io"
 
