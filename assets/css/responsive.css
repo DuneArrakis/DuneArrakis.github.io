@@ -1,0 +1,324 @@
+/* Local overrides for the pinned WuK/Lanyon theme. Keep desktop typography. */
+.sidebar-toggle:focus-visible,
+.sidebar a:focus-visible,
+.table-scroll:focus-visible {
+  outline: 2px solid #35666b;
+  outline-offset: 3px;
+}
+
+button.sidebar-toggle {
+  border: 0;
+  font: inherit;
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+/* Touch screens cannot use the theme's hover-to-scroll controls. */
+@media (hover: none), (pointer: coarse) {
+  body .sidebar,
+  body .sidebar:hover,
+  body pre,
+  body .highlight,
+  #toc,
+  #sidebar-search-results-container {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body .effect-info {
+    position: static;
+    margin-top: 1rem;
+  }
+
+  body .effect-right_to_left:hover .effect-img {
+    transform: none;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-padding-top: 4.5rem;
+  }
+
+  body {
+    line-height: 1.8;
+  }
+
+  body .wrap,
+  body.sidebar-overlay #sidebar-checkbox:checked ~ .wrap {
+    display: block;
+    width: 100%;
+    transform: none;
+    isolation: isolate;
+  }
+
+  body .container.content,
+  body .home-content {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 100vh;
+    padding: 4.5rem max(1.125rem, env(safe-area-inset-right))
+      max(2rem, env(safe-area-inset-bottom)) max(1.125rem, env(safe-area-inset-left));
+    overflow-wrap: anywhere;
+  }
+
+  .content h1,
+  .home-content h1 {
+    font-size: 1.8rem;
+    line-height: 1.4;
+    margin: 0 0 1.25rem;
+  }
+
+  .content h2,
+  .home-content h2 {
+    font-size: 1.4rem;
+    line-height: 1.5;
+    margin: 1.75rem 0 1rem;
+  }
+
+  .content h3 {
+    font-size: 1.2rem;
+    line-height: 1.5;
+  }
+
+  .content p {
+    text-indent: 2em;
+  }
+
+  .content img,
+  .content p img,
+  .content video,
+  .content iframe {
+    max-width: 100%;
+  }
+
+  .content img,
+  .content video {
+    height: auto;
+  }
+
+  .content p:has(> img) {
+    text-indent: 0;
+  }
+
+  .content ul,
+  .content ol,
+  .home-content ul {
+    padding-left: 1.5rem;
+  }
+
+  .content blockquote {
+    margin-left: 0;
+    margin-right: 0;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+  }
+
+  .content pre,
+  .content .highlight,
+  .content .katex-display,
+  .content .vega-embed,
+  .content .mermaid {
+    max-width: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .content pre,
+  .content .highlight {
+    font-size: .875rem;
+    overflow-wrap: normal;
+  }
+
+  .content .katex-display > .katex {
+    white-space: nowrap;
+  }
+
+  .content .table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .content .table-scroll table {
+    display: table;
+    width: max-content;
+    min-width: 100%;
+    margin-bottom: 0;
+    font-size: .875rem;
+    overflow-wrap: normal;
+  }
+
+  .content .table-scroll thead {
+    display: table-header-group;
+  }
+
+  .content .table-scroll tbody {
+    display: table-row-group;
+    overflow: visible;
+  }
+
+  .content .table-scroll tr {
+    display: table-row;
+  }
+
+  .content .table-scroll th,
+  .content .table-scroll td {
+    padding: .5rem .75rem;
+    max-width: 24rem;
+  }
+
+  .content .post-date {
+    font-size: .875rem;
+    line-height: 1.8;
+  }
+
+  .home-content a {
+    color: var(--theme-base-color2);
+    text-decoration: underline;
+    text-underline-offset: .2em;
+  }
+
+  .home-content li a {
+    display: inline-block;
+    padding: .5rem 0;
+  }
+
+  body .sidebar {
+    box-sizing: border-box;
+    z-index: 30;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: min(20rem, calc(100vw - 4rem));
+    min-height: 0;
+    padding-top: 4rem;
+    padding-bottom: env(safe-area-inset-bottom);
+    font-size: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateX(-100%);
+  }
+
+  body.layout-reverse .sidebar {
+    left: auto;
+    right: 0;
+    transform: translateX(100%);
+  }
+
+  body #sidebar-checkbox:checked ~ .sidebar,
+  body.layout-reverse #sidebar-checkbox:checked ~ .sidebar {
+    z-index: 30;
+    transform: none;
+  }
+
+  body .sidebar-toggle,
+  body #sidebar-checkbox:checked ~ .sidebar-toggle,
+  body.layout-reverse #sidebar-checkbox:checked ~ .sidebar-toggle {
+    z-index: 40;
+    position: fixed;
+    top: max(.75rem, env(safe-area-inset-top));
+    min-width: 44px;
+    min-height: 44px;
+    padding: 6px;
+    border-radius: .5rem;
+    background-color: var(--theme-base-color, Azure);
+    box-shadow: 0 1px 8px #0002;
+    transform: none;
+  }
+
+  body.layout-reverse .sidebar-toggle {
+    right: max(.75rem, env(safe-area-inset-right));
+  }
+
+  body #sidebar-checkbox:checked ~ .sidebar-toggle::before {
+    background: none;
+    content: "×";
+    color: #313131;
+    font: 32px/32px Arial, sans-serif;
+    text-align: center;
+  }
+
+  body .sidebar-nav-item,
+  #toc a,
+  #sidebar-search-results-container a {
+    display: block;
+    padding-top: .625rem;
+    padding-bottom: .625rem;
+    overflow-wrap: anywhere;
+  }
+
+  body #sidebar-search-input {
+    min-height: 44px;
+    font-size: 16px;
+    border-bottom: 1px solid #78999b;
+    border-radius: 0;
+  }
+
+  body #toc,
+  body #sidebar-search-results-container {
+    max-height: none;
+    overflow: visible;
+    padding-left: 1.25rem;
+  }
+
+  body .sidebar .effect {
+    margin: 0;
+    text-align: center;
+  }
+
+  body .sidebar .effect-img {
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    object-fit: cover;
+    transform: none;
+  }
+
+  body .sidebar .effect-info {
+    position: static;
+    margin-top: 1rem;
+    font-size: .875rem;
+  }
+
+  .sidebar .effect-info a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .sidebar-backdrop:not([hidden]) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    border: 0;
+    padding: 0;
+    background: #0005;
+  }
+
+  html.mobile-menu-open,
+  html.mobile-menu-open body {
+    overflow: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body .wrap,
+  body .sidebar,
+  body .sidebar-toggle,
+  body .effect-img {
+    transition: none;
+  }
+}

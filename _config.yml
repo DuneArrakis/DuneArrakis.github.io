@@ -191,7 +191,7 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
             - | # 一些页面优化标签，看不懂可跳过
               <meta
                 name="viewport"
-                content="width=device-width,minimum-scale=1,initial-scale=1"
+                content="width=device-width,initial-scale=1,viewport-fit=cover"
               />
               <meta
                 http-equiv="content-type"
@@ -290,6 +290,9 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
                   color: blue;
                 }
               </style>
+            - | # 本地响应式覆盖，便于独立维护且不修改远程主题
+              <link rel="stylesheet" href="/assets/css/responsive.css" />
+              <script defer src="/assets/js/responsive.js"></script>
         page:
           title: # 为每个页面自动生成一个 H1 title
             enable: true
@@ -496,20 +499,7 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
               }
             </style>
           append: |
-            <script
-              async="async"
-              src="https://cdn.jsdelivr.net/combine/npm/reveal.js@5.0.5/dist/reveal.min.js,npm/reveal.js@5.0.5/plugin/markdown/markdown.min.js,npm/reveal.js@5.0.5/plugin/math/math.min.js,npm/reveald3@2.0.0/reveald3.min.js,npm/reveal.js-mermaid-plugin@2.3.0/plugin/mermaid/mermaid.min.js"
-              onload="
-              for(let x of document.getElementsByClassName('wrap'))
-                x.classList.add('reveal');
-              Reveal.initialize({
-                scrollActivationWidth: null,
-                height: '100%',
-                mouseWheel: true,
-                navigationMode: 'linear',
-                plugins: [ RevealMarkdown,RevealMath.KaTeX,Reveald3,RevealMermaid ]
-              });
-            "></script>
+            <script defer src="/assets/js/home.js"></script>
 
 compress_html: # <https://github.com/penibelst/jekyll-compress-html>
   clippings: all
