@@ -1,0 +1,1 @@
+{% if include.links.size > 0 %}<ul class="entry-links">{% for link in include.links %}{% if link.url.size > 0 %}<li><a href="{{ link.url | relative_url }}">{{ link.label | escape }} {% include icon.html name='external' %}</a></li>{% endif %}{% endfor %}</ul>{% endif %}

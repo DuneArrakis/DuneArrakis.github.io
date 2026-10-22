@@ -1,0 +1,26 @@
+---
+layout: page
+title: 文章归档
+eyebrow: NOTES & WRITING
+description: 学习、生活，以及一路走来的思考。
+permalink: /archive/
+section: writing
+---
+<div class="archive-toolbar"><p>共 <strong>{{ site.posts.size }}</strong> 篇文字</p><a href="{{ '/tags/' | relative_url }}">按标签浏览 {% include icon.html name='arrow' %}</a></div>
+<div class="archive-filters" data-archive-filters hidden>
+  <div class="search-field">{% include icon.html name='search' %}<label class="sr-only" for="archive-search">搜索标题或标签</label><input id="archive-search" type="search" placeholder="搜索标题或标签…" autocomplete="off"></div>
+  <label class="sr-only" for="archive-tag">按标签筛选</label>
+  <select id="archive-tag"><option value="">全部标签</option>{% assign sorted_tags = site.tags | sort %}{% for tag in sorted_tags %}<option value="{{ tag[0] | escape }}">{{ tag[0] | escape }} ({{ tag[1].size }})</option>{% endfor %}</select>
+</div>
+<p class="filter-status" id="filter-status" role="status" aria-live="polite" hidden></p>
+<div class="archive-groups">
+  {% assign years = site.posts | group_by_exp: 'post', "post.date | date: '%Y'" %}
+  {% for year in years %}
+  <section class="archive-year" data-archive-year aria-labelledby="year-{{ year.name }}"><h2 id="year-{{ year.name }}">{{ year.name }}<span>{{ year.items.size }} 篇</span></h2><ul>
+    {% for post in year.items %}
+    <li class="archive-row" data-archive-row data-title="{{ post.title | escape }}" data-tags="{{ post.tags | jsonify | escape }}"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%m.%d' }}</time><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a><span class="row-tag">{{ post.tags | first | escape }}</span></li>
+    {% endfor %}
+  </ul></section>
+  {% endfor %}
+</div>
+<div class="search-empty" id="search-empty" hidden><h2>没有找到匹配的文章</h2><p>试试其他关键词，或清除筛选。</p><button type="button" id="reset-filters">清除筛选</button></div>

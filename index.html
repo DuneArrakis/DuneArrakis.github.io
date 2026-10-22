@@ -1,0 +1,60 @@
+---
+layout: default
+title: 个人学术主页
+home: true
+---
+{% assign academic = site.data.academic %}
+<section class="intro-section" id="about" aria-labelledby="about-title">
+  <p class="eyebrow">ABOUT ME</p>
+  <h1 id="about-title">关于我<span class="heading-dot">.</span></h1>
+  <div class="intro-copy">{{ academic.profile.intro | markdownify }}</div>
+  <div class="intro-actions">
+    {% if academic.profile.email.size > 0 %}<a class="text-link" href="mailto:{{ academic.profile.email | escape }}">联系我 {% include icon.html name='arrow' %}</a>{% endif %}
+    <a class="muted-link" href="{{ '/archive/' | relative_url }}">阅读我的文字 {% include icon.html name='arrow' %}</a>
+  </div>
+  {% if academic.profile.updating %}<p class="update-note"><span aria-hidden="true"></span>主页内容持续完善中</p>{% endif %}
+</section>
+{% if academic.news.size > 0 %}
+<section class="academic-section news-section" aria-labelledby="news-title">
+  <div class="section-heading"><h2 id="news-title">最新动态</h2><span>NEWS</span></div>
+  <ul class="news-list">{% for item in academic.news %}<li><span class="entry-period">{{ item.date | escape }}</span><div>{{ item.text | markdownify }}</div></li>{% endfor %}</ul>
+</section>
+{% endif %}
+<section class="academic-section" id="research" aria-labelledby="research-title">
+  <div class="section-heading"><h2 id="research-title">研究方向</h2><span>RESEARCH INTERESTS</span></div>
+  {% if academic.research.size > 0 %}
+  <div class="research-list">{% for item in academic.research %}<article class="research-item"><span class="entry-number">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span><div><h3>{{ item.title | escape }}</h3><div class="entry-description">{{ item.description | markdownify }}</div>{% if item.keywords.size > 0 %}<ul class="keyword-list">{% for keyword in item.keywords %}<li>{{ keyword | escape }}</li>{% endfor %}</ul>{% endif %}</div></article>{% endfor %}</div>
+  {% else %}
+  <div class="empty-state"><span class="empty-mark" aria-hidden="true">01 /</span><div><h3>探索的问题，正在这里汇集</h3><p>研究主题、关注的问题与方法将陆续补充。</p></div><span class="status-label">待补充</span></div>
+  {% endif %}
+</section>
+<section class="academic-section" id="publications" aria-labelledby="publications-title">
+  <div class="section-heading"><h2 id="publications-title">学术成果</h2><span>PUBLICATIONS</span></div>
+  {% if academic.publications.size > 0 %}
+  <ol class="publication-list">{% for item in academic.publications %}<li><span class="entry-period">{{ item.year | escape }}</span><article><h3>{{ item.title | escape }}</h3><p class="publication-authors">{{ item.authors | escape }}</p><p class="publication-venue">{{ item.venue | escape }}{% if item.note.size > 0 %}<span class="publication-note"> · {{ item.note | escape }}</span>{% endif %}</p>{% include entry-links.html links=item.links %}</article></li>{% endfor %}</ol>
+  {% else %}
+  <div class="empty-state"><span class="empty-mark" aria-hidden="true">02 /</span><div><h3>论文与预印本</h3><p>学术成果整理后将在此展示。</p></div><span class="status-label">待补充</span></div>
+  {% endif %}
+</section>
+<section class="academic-section" id="projects" aria-labelledby="projects-title">
+  <div class="section-heading"><h2 id="projects-title">研究与项目</h2><span>PROJECTS</span></div>
+  {% if academic.projects.size > 0 %}
+  <div class="project-list">{% for item in academic.projects %}<article class="project-item"><span class="entry-period">{{ item.period | escape }}</span><h3>{{ item.title | escape }}</h3><div class="entry-description">{{ item.description | markdownify }}</div>{% include entry-links.html links=item.links %}</article>{% endfor %}</div>
+  {% else %}
+  <div class="empty-state"><span class="empty-mark" aria-hidden="true">03 /</span><div><h3>从想法到实践</h3><p>这里将记录研究项目、开源工作与实践成果。</p></div><span class="status-label">待补充</span></div>
+  {% endif %}
+</section>
+<section class="academic-section" id="experience" aria-labelledby="experience-title">
+  <div class="section-heading"><h2 id="experience-title">教育与经历</h2><span>EXPERIENCE</span></div>
+  {% if academic.experience.size > 0 %}
+  <ul class="experience-list">{% for item in academic.experience %}<li><span class="entry-period">{{ item.period | escape }}</span><div><h3>{{ item.title | escape }}</h3><p>{{ item.institution | escape }}</p>{% if item.description.size > 0 %}<div class="entry-description">{{ item.description | markdownify }}</div>{% endif %}</div></li>{% endfor %}</ul>
+  {% else %}
+  <div class="empty-state"><span class="empty-mark" aria-hidden="true">04 /</span><div><h3>学习与研究的足迹</h3><p>教育背景、科研经历与学术服务将在此更新。</p></div><span class="status-label">待补充</span></div>
+  {% endif %}
+</section>
+<section class="academic-section writing-section" id="writing" aria-labelledby="writing-title">
+  <div class="section-heading"><h2 id="writing-title">文字与记录</h2><span>NOTES & WRITING</span></div>
+  <p class="section-description">研究之外，记录学习、生活与偶尔的灵感。</p>
+  <ul class="recent-posts">{% for post in site.posts limit: 3 %}<li><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%Y.%m.%d' }}</time><a href="{{ post.url | relative_url }}">{{ post.title | escape }}{% include icon.html name='arrow' %}</a></li>{% endfor %}</ul>
+  <a class="text-link archive-link" href="{{ '/archive/' | relative_url }}">查看全部 {{ site.posts.size }} 篇文章 {% include icon.html name='arrow' %}</a>
+</section>

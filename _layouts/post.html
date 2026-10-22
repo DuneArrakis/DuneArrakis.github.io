@@ -1,0 +1,20 @@
+---
+layout: default
+---
+<article class="post">
+  <header class="post-header">
+    <a class="back-link" href="{{ '/archive/' | relative_url }}">← 全部文章</a>
+    <p class="eyebrow">NOTES & WRITING</p>
+    <h1>{{ page.title | escape }}</h1>
+    <div class="post-meta"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%Y 年 %m 月 %d 日' }}</time>{% for tag in page.tags %}<a href="{{ '/tags/' | relative_url }}#tag-{{ tag | url_encode | replace: '+', '%20' }}">{{ tag | escape }}</a>{% endfor %}</div>
+  </header>
+  <details class="post-toc" data-toc hidden><summary>文章目录</summary><nav aria-label="文章目录"></nav></details>
+  <div class="prose" data-post-content>{{ content }}</div>
+  <footer class="post-footer"><p>除特别声明或转载文章外，本文采用 <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="license">CC BY 4.0</a> 协议。</p><nav class="post-pagination" aria-label="相邻文章">{% if page.previous %}<a href="{{ page.previous.url | relative_url }}"><span>← 上一篇</span>{{ page.previous.title | escape }}</a>{% endif %}{% if page.next %}<a class="next-post" href="{{ page.next.url | relative_url }}"><span>下一篇 →</span>{{ page.next.title | escape }}</a>{% endif %}</nav></footer>
+</article>
+{% if content contains '$' or content contains '\(' or content contains '\[' or content contains 'math/tex' %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+{% endif %}
+{% if content contains 'language-mermaid' %}<script defer src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>{% endif %}

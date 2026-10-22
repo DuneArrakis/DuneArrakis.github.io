@@ -1,0 +1,55 @@
+# 主页内容入口。保留空字符串 / 空数组会显示待补充状态，不会生成无效链接。
+# 正文支持 Markdown；姓名、机构、标题等短字段使用纯文本。
+profile:
+  name: "Zhang Zhoutao"
+  name_zh: "" # 可填写中文名
+  role: "" # 例如：博士研究生（请填写真实信息）
+  affiliation: ""
+  location: ""
+  avatar: "/avatar.jpg"
+  email: "zzt@hdu.edu.cn"
+  github: "https://github.com/DuneArrakis"
+  scholar: "" # Google Scholar 主页地址；留空则隐藏
+  orcid: ""
+  cv: "" # 上传简历到 file/ 后填写，例如 /file/cv.pdf
+  intro: |
+    欢迎来到我的个人主页。
+
+    这里将介绍我的研究方向、学术成果与项目，也保留学习与生活中的文字记录。
+  updating: true # 内容完善后改为 false，隐藏「主页内容持续完善中」
+
+# 最新动态按填写顺序展示；没有动态时整个栏目隐藏。
+news: []
+# - date: "2026-10"
+#   text: "在这里填写一条真实动态，可使用 [链接](https://example.com)。"
+
+research: []
+# - title: "研究方向名称"
+#   description: "介绍关注的问题、研究目标和方法。支持 Markdown。"
+#   keywords: ["关键词一", "关键词二"]
+
+publications: []
+# - title: "论文标题"
+#   authors: "作者一，作者二"
+#   venue: "期刊 / 会议名称"
+#   year: "2026"
+#   note: "" # 可选：已发表 / 预印本 / 共同一作等真实说明
+#   links:
+#     - label: "论文"
+#       url: "https://doi.org/填写真实DOI"
+#     - label: "代码"
+#       url: "https://github.com/用户名/仓库"
+
+projects: []
+# - title: "项目名称"
+#   period: "2025 — 2026"
+#   description: "说明研究问题、自己的工作与项目成果。支持 Markdown。"
+#   links:
+#     - label: "项目主页"
+#       url: "https://example.com"
+
+experience: []
+# - period: "2024 — 至今"
+#   title: "学位 / 职务"
+#   institution: "学校 / 实验室 / 机构"
+#   description: "可选的补充说明。支持 Markdown。"

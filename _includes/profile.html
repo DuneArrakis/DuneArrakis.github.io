@@ -1,0 +1,32 @@
+<aside class="profile" aria-label="个人资料">
+  <div class="profile-identity">
+    {% if profile.avatar.size > 0 %}<img class="profile-avatar" src="{{ profile.avatar | relative_url }}" alt="{{ profile.name | escape }} 的头像" width="160" height="160">{% endif %}
+    <div>
+      <p class="profile-name">{{ profile.name | escape }}</p>
+      {% if profile.name_zh.size > 0 %}<p class="profile-name-zh">{{ profile.name_zh | escape }}</p>{% endif %}
+      <p class="profile-role">{{ profile.role | default: '个人学术主页' | escape }}</p>
+      {% if profile.affiliation.size > 0 %}<p class="profile-affiliation">{{ profile.affiliation | escape }}</p>{% endif %}
+      {% if profile.location.size > 0 %}<p class="profile-location">{% include icon.html name='pin' %}{{ profile.location | escape }}</p>{% endif %}
+    </div>
+  </div>
+  <div class="profile-links">
+    {% if profile.email.size > 0 %}<a href="mailto:{{ profile.email | escape }}">{% include icon.html name='mail' %}<span>{{ profile.email | escape }}</span></a>{% endif %}
+    {% if profile.github.size > 0 %}<a href="{{ profile.github | escape }}">{% include icon.html name='github' %}<span>GitHub</span>{% include icon.html name='external' %}</a>{% endif %}
+    {% if profile.scholar.size > 0 %}<a href="{{ profile.scholar | escape }}">{% include icon.html name='book' %}<span>Google Scholar</span>{% include icon.html name='external' %}</a>{% endif %}
+    {% if profile.orcid.size > 0 %}<a href="{{ profile.orcid | escape }}">{% include icon.html name='external' %}<span>ORCID</span></a>{% endif %}
+    {% if profile.cv.size > 0 %}<a href="{{ profile.cv | relative_url }}">{% include icon.html name='file' %}<span>个人简历 / CV</span>{% include icon.html name='arrow' %}</a>{% endif %}
+  </div>
+  {% if page.home %}
+  <nav class="section-nav" aria-label="本页目录">
+    <span class="small-label">ON THIS PAGE</span>
+    <a href="#about">关于我</a>
+    <a href="#research">研究方向</a>
+    <a href="#publications">学术成果</a>
+    <a href="#projects">研究与项目</a>
+    <a href="#experience">教育与经历</a>
+    <a href="#writing">文字与记录</a>
+  </nav>
+  {% else %}
+  <div class="profile-back"><a href="{{ '/' | relative_url }}">← 返回学术主页</a><p>研究之外，也把所见所想<br>写进日常。</p></div>
+  {% endif %}
+</aside>
