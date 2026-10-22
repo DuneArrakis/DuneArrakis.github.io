@@ -49,7 +49,11 @@ projects: []
 #       url: "https://example.com"
 
 experience:
-- period: "2022.9 — 2026.6"
-  title: "本科"
-  institution: "杭州电子科技大学"
-  # description: "可选的补充说明。支持 Markdown。"
+  - period: "2026.9 — 至今"
+    title: "博士研究生 · 网络空间安全"
+    institution: "杭州电子科技大学"
+    description: "网络空间安全学院"
+  - period: "2022.9 — 2026.6"
+    title: "本科 · 网络空间安全"
+    institution: "杭州电子科技大学"
+    description: "网络空间安全学院 · 卓越学院"
