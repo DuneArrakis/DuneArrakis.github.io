@@ -71,7 +71,11 @@ bundle exec jekyll serve --host 127.0.0.1
 bundle exec jekyll build
 ```
 
+`Gemfile` 使用与 GitHub Pages 一致的 `github-pages` 依赖集，避免单独指定依赖版本导致线上与本地环境不一致。Windows 时区数据仅在 Windows 安装。
+
 继续使用仓库已有的 GitHub Pages 发布方式。`CNAME` 保留 `dune-arrakis.cn`，不需要新增托管平台。若使用仓库现有的自动提交脚本，提交前请先检查改动；脚本会提交并推送仓库中的改动。
+
+若发布长时间停留在处理中，先在仓库 Actions 的 `pages build and deployment` 中查看各阶段：`Build with Jekyll` 失败时按日志修正源码；构建和上传成功、但 `deploy` 排队或取消时，应重试部署并检查 GitHub 服务状态，不能仅根据等待时间判断为页面代码错误。
 
 ## 文件结构
 

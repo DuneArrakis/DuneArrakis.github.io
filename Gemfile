@@ -1,9 +1,7 @@
 source "https://rubygems.org"
 
-gem "jekyll", "~> 3.10"
-gem "jekyll-seo-tag", "~> 2.8"
-gem "jekyll-sitemap", "~> 1.4"
-gem "jekyll-redirect-from", "~> 0.16"
-gem "webrick", "~> 1.8"
-gem "tzinfo", "~> 2.0"
-gem "tzinfo-data"
+# Match the dependency set used by GitHub Pages' branch-based build.
+gem "github-pages", "~> 232", group: :jekyll_plugins
+
+# Windows needs a timezone database; Linux runners provide their own.
+gem "tzinfo-data", platforms: [:mingw, :x64_mingw, :mswin]
