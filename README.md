@@ -1,6 +1,14 @@
 # Zhang Zhoutao · 个人学术主页
 
-基于 Jekyll / GitHub Pages 的学术主页，包含个人简介、研究方向、学术成果、项目、教育经历和文章归档。使用本地模板与样式，无需前端打包。现有域名及文章日期路径保持不变。
+基于 Jekyll / GitHub Pages 的中英双语学术主页，包含个人简介、研究方向、学术成果、教育经历和文章归档。使用本地模板与样式，无需前端打包。现有域名及文章日期路径保持不变。
+
+## 中英文与栏目显示
+
+中文首页为 `/`，英文首页为 `/en/`，通过顶部的「中文 / English」链接切换，无需 JavaScript。两种语言共享首页模板，各自有独立网址、页面语言和搜索引擎描述。内页顶部的语言入口指向对应语言的学术首页；现有博客文章及归档保留中文，英文首页的文章入口已标注 Chinese。
+
+中文资料维护在 `_data/academic.yml`，英文简介、身份、机构、地点及各栏目维护在 `_data/academic_en.yml`。姓名、头像、邮箱、社交链接和 `updating` 开关共用中文文件中的配置。新增研究方向、成果、动态或经历时，请同步填写两个内容文件；界面文字在 `_data/translations.yml`。
+
+项目栏目及侧栏入口已隐藏，原始数据保留。需要重新显示时，将 `_config.yml` 中的 `show_projects` 改为 `true`。
 
 ## 填写主页内容
 
@@ -28,7 +36,7 @@ research:
 
 YAML 用空格缩进，不使用 Tab。时间、含冒号或特殊符号的内容建议加引号；多段正文使用 `|` 换行。`intro`、`description`、动态的 `text` 支持 Markdown；其他短字段按纯文本显示。论文作者按所填顺序展示，链接可填写站内 `/file/...` 路径或完整网址。
 
-上传简历到 `file/cv.pdf`，再把 `profile.cv` 改为 `/file/cv.pdf`；替换 `avatar.jpg` 或修改 `profile.avatar` 即可换头像。更改姓名后，也请同步更新 `_config.yml` 的 `title`、`author`、`description`，用于搜索引擎与 RSS。
+上传简历到 `file/cv.pdf`，再把 `profile.cv` 改为 `/file/cv.pdf`；替换 `avatar.jpg` 或修改 `profile.avatar` 即可换头像。更改姓名后，也请同步更新 `_config.yml` 的 `title`、`author`、`description`，用于搜索引擎。
 
 ## 继续写文章
 
@@ -44,7 +52,7 @@ tags:
 在这里写正文。
 ```
 
-文章会自动出现在 `/archive/`、`/tags/`、RSS 与首页的最新文章中。归档支持标题/标签搜索与标签组合筛选，关闭 JavaScript 仍能浏览全部文章。文章支持 Markdown、代码高亮、公式、Mermaid、可横向滚动的表格和自动目录。公式与 Mermaid 按需从 CDN 加载；加载失败时仍保留原始文字/代码。
+文章会自动出现在 `/archive/`、`/tags/` 与首页的最新文章中。归档支持标题/标签搜索与标签组合筛选，关闭 JavaScript 仍能浏览全部文章。文章支持 Markdown、代码高亮、公式、Mermaid、可横向滚动的表格和自动目录。公式与 Mermaid 按需从 CDN 加载；加载失败时仍保留原始文字/代码。
 
 原来的归档、标签和 404 是放在 `_posts` 内的功能页；现在迁移到了根目录，`/archive/`、`/tags/` 和 `/404` 入口继续可用，GitHub Pages 的错误页使用 `/404.html`。这些功能页不再被计作文章。真正的文章正文和文件名没有修改。
 
@@ -69,7 +77,10 @@ bundle exec jekyll build
 
 ```text
 _data/academic.yml          主页内容
-index.html                 学术首页
+index.html / en/index.html  中文 / 英文学术首页入口
+_data/academic_en.yml       英文主页内容
+_data/translations.yml      中英文界面文字
+_includes/home.html         共享学术首页模板
 archive.html / tags.html   文章索引
 _posts/                    原有文章与新文章
 _layouts/                  全站、文章和通用页面模板

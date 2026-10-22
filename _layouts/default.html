@@ -1,26 +1,39 @@
+{% assign language = page.lang | default: site.lang %}
+{% assign t = site.data.translations[language] %}
+{% assign profile = site.data.academic.profile %}
+{% assign localized_profile = profile %}
+{% if language == 'en' %}{% assign localized_profile = site.data.academic_en.profile %}{% endif %}
 <!doctype html>
-<html lang="{{ site.lang | default: 'zh-CN' }}">
+<html lang="{{ language }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   {% seo %}
-  {% feed_meta %}
+  {% if page.home %}
+  <link rel="alternate" hreflang="zh-CN" href="{{ '/' | absolute_url }}">
+  <link rel="alternate" hreflang="en" href="{{ '/en/' | absolute_url }}">
+  <link rel="alternate" hreflang="x-default" href="{{ '/' | absolute_url }}">
+  {% endif %}
   <link rel="icon" href="{{ '/avatar.jpg' | relative_url }}" type="image/jpeg">
   <link rel="stylesheet" href="{{ '/assets/css/academic.css' | relative_url }}">
   <script defer src="{{ '/assets/js/academic.js' | relative_url }}"></script>
 </head>
 <body class="{% if page.home %}is-home{% else %}is-inner{% endif %}">
-  {% assign profile = site.data.academic.profile %}
-  <a class="skip-link" href="#main-content">跳转到正文</a>
+  <a class="skip-link" href="#main-content">{{ t.skip }}</a>
   <header class="site-header">
     <div class="header-inner">
-      <a class="site-brand" href="{{ '/' | relative_url }}">{{ profile.name | escape }}<span class="brand-dot">.</span></a>
-      <nav class="site-nav" aria-label="主导航">
-        <a href="{{ '/' | relative_url }}" {% if page.home %}aria-current="page"{% endif %}>关于</a>
-        <a href="{{ '/#research' | relative_url }}">研究</a>
-        <a href="{{ '/#publications' | relative_url }}">成果</a>
-        <a href="{{ '/archive/' | relative_url }}" {% if page.section == 'writing' or page.layout == 'post' %}aria-current="page"{% endif %}>文章归档 <span class="nav-arrow" aria-hidden="true">↗</span></a>
+      <a class="site-brand" href="{{ t.home_url | relative_url }}">{{ profile.name | escape }}<span class="brand-dot">.</span></a>
+      <nav class="site-nav" aria-label="{{ t.main_nav }}">
+        <a href="{{ t.home_url | relative_url }}" {% if page.home %}aria-current="page"{% endif %}>{{ t.about_nav }}</a>
+        <a href="{{ t.home_url | append: '#research' | relative_url }}">{{ t.research_nav }}</a>
+        <a href="{{ t.home_url | append: '#publications' | relative_url }}">{{ t.publications_nav }}</a>
+        <a href="{{ '/archive/' | relative_url }}" {% if page.section == 'writing' or page.layout == 'post' %}aria-current="page"{% endif %}>{{ t.archive_nav }} <span class="nav-arrow" aria-hidden="true">↗</span></a>
+      </nav>
+      <nav class="language-switch" aria-label="{{ t.language_nav }}">
+        <a href="{{ '/' | relative_url }}" lang="zh-CN" hreflang="zh-CN" {% if page.home and language == 'zh-CN' %}aria-current="page"{% endif %}>中文</a>
+        <span aria-hidden="true">/</span>
+        <a href="{{ '/en/' | relative_url }}" lang="en" hreflang="en" {% if page.home and language == 'en' %}aria-current="page"{% endif %}>English</a>
       </nav>
     </div>
   </header>
@@ -31,8 +44,7 @@
   <footer class="site-footer">
     <div class="footer-inner">
       <span>© {{ site.time | date: '%Y' }} {{ profile.name | escape }}</span>
-      <span class="footer-note">研究 · 探索 · 记录</span>
-      <a href="{{ '/feed.xml' | relative_url }}">RSS {% include icon.html name='arrow' %}</a>
+      <span class="footer-note">{{ t.footer }}</span>
     </div>
   </footer>
 </body>

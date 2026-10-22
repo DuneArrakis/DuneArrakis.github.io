@@ -44,6 +44,11 @@ p { margin-bottom: 16px; }
 .site-nav a[aria-current] { color: var(--ink); }
 .site-nav a[aria-current]::after { content: ""; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--blue); }
 .nav-arrow { margin-left: 8px; color: var(--blue); }
+.language-switch { display: flex; align-items: center; gap: 9px; white-space: nowrap; font-size: 12px; }
+.language-switch a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); }
+.language-switch a[aria-current] { color: var(--blue); font-weight: 600; text-decoration: underline; }
+.language-switch > span { color: var(--line); }
+html[lang="en"] .section-heading > span { display: none; }
 .site-shell { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 82px; padding-top: 62px; padding-bottom: 72px; min-height: calc(100vh - 160px); }
 .profile { align-self: start; position: sticky; top: 122px; }
 .profile-avatar { display: block; width: 156px; height: 156px; object-fit: cover; border-radius: 50%; margin-bottom: 25px; border: 5px solid white; outline: 1px solid var(--line); }
@@ -210,14 +215,24 @@ main { min-width: 0; overflow-wrap: anywhere; }
   .site-shell { grid-template-columns: 205px minmax(0, 1fr); gap: 48px; }
   .profile-name { font-size: 25px; }
   .site-nav { gap: 26px; }
+  .header-inner { gap: 20px; }
+  .site-nav { gap: 20px; }
+}
+@media (max-width: 900px) {
+  .header-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 16px; padding-top: 12px; }
+  .site-brand { grid-column: 1; grid-row: 1; }
+  .language-switch { grid-column: 2; grid-row: 1; }
+  .site-nav { grid-column: 1 / -1; grid-row: 2; justify-content: space-between; gap: 12px; }
+  .site-nav a { min-height: 44px; }
+  html { scroll-padding-top: 125px; }
 }
 @media (max-width: 760px) {
-  html { scroll-padding-top: 84px; }
+  html { scroll-padding-top: 125px; }
   .header-inner, .site-shell, .footer-inner { width: calc(100% - 40px); }
-  .header-inner { min-height: 65px; gap: 20px; }
+  .header-inner { min-height: 65px; gap: 0 16px; }
   .site-brand { font-size: 18px; }
   .site-nav { gap: 18px; }
-  .site-nav a { min-height: 65px; font-size: 12px; }
+  .site-nav a { min-height: 44px; font-size: 12px; }
   .nav-arrow { display: none; }
   .site-shell { display: block; padding-top: 32px; padding-bottom: 44px; }
   .profile { position: static; margin-bottom: 35px; }
@@ -257,10 +272,10 @@ main { min-width: 0; overflow-wrap: anywhere; }
   .footer-note { display: none; }
 }
 @media (max-width: 400px) {
-  .header-inner { flex-direction: column; gap: 0; align-items: flex-start; padding-top: 12px; }
+  .header-inner { gap: 0 10px; }
   .site-nav { width: 100%; justify-content: space-between; }
   .site-nav a { min-height: 44px; }
-  html { scroll-padding-top: 102px; }
+  html { scroll-padding-top: 125px; }
   .profile-name { font-size: 23px; }
   .profile-identity { gap: 18px; }
   .status-label { display: none; }

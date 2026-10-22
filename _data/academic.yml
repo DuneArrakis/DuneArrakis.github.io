@@ -1,13 +1,13 @@
 # 主页内容入口。保留空字符串 / 空数组会显示待补充状态，不会生成无效链接。
 # 正文支持 Markdown；姓名、机构、标题等短字段使用纯文本。
 profile:
-  name: "Zhang Zhoutao"
-  name_zh: "" # 可填写中文名
-  role: "" # 例如：博士研究生（请填写真实信息）
-  affiliation: ""
-  location: ""
+  name: "Zhoutao Zhang" # 可填写英文名
+  name_zh: "张洲滔" # 可填写中文名
+  role: "博士研究生" # 英文版对应文字在 academic_en.yml 中维护
+  affiliation: "杭州电子科技大学"
+  location: "中国，杭州"
   avatar: "/avatar.jpg"
-  email: "zzt@hdu.edu.cn"
+  email: "zhangzhoutao@hdu.edu.cn"
   github: "https://github.com/DuneArrakis"
   scholar: "" # Google Scholar 主页地址；留空则隐藏
   orcid: ""
@@ -15,8 +15,8 @@ profile:
   intro: |
     欢迎来到我的个人主页。
 
-    这里将介绍我的研究方向、学术成果与项目，也保留学习与生活中的文字记录。
-  updating: true # 内容完善后改为 false，隐藏「主页内容持续完善中」
+    这里将介绍我的研究方向、学术成果，也记录各种文字。
+  updating: false # 内容完善后改为 false，隐藏「主页内容持续完善中」
 
 # 最新动态按填写顺序展示；没有动态时整个栏目隐藏。
 news: []
@@ -48,8 +48,8 @@ projects: []
 #     - label: "项目主页"
 #       url: "https://example.com"
 
-experience: []
-# - period: "2024 — 至今"
-#   title: "学位 / 职务"
-#   institution: "学校 / 实验室 / 机构"
-#   description: "可选的补充说明。支持 Markdown。"
+experience:
+- period: "2022.9 — 2026.6"
+  title: "本科"
+  institution: "杭州电子科技大学"
+  # description: "可选的补充说明。支持 Markdown。"

@@ -1,11 +1,12 @@
 title: Zhang Zhoutao
-description: "Zhang Zhoutao 的个人学术主页，研究、项目与文字记录。"
+description: "张洲滔的个人学术主页，研究与文字记录。"
 url: "https://dune-arrakis.cn"
 baseurl: ""
 lang: zh-CN
 author: Zhang Zhoutao
 timezone: Asia/Shanghai
 future: true
+show_projects: false
 
 # 保留原有文章的日期路径，已有链接无需修改。
 permalink: pretty
@@ -23,7 +24,6 @@ defaults:
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
-  - jekyll-feed
   - jekyll-redirect-from
 
 markdown: kramdown

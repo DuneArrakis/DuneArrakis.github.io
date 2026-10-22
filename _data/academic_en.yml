@@ -1,0 +1,18 @@
+# English homepage content. Contact links, avatar and names are shared with academic.yml.
+profile:
+  role: "PhD Student"
+  affiliation: "Hangzhou Dianzi University"
+  location: "Hangzhou, China"
+  intro: |
+    Welcome to my personal website.
+
+    Here I share my research interests, academic work, and writing.
+
+news: []
+research: []
+publications: []
+projects: []
+experience:
+  - period: "2022.9 — 2026.6"
+    title: "Undergraduate studies"
+    institution: "Hangzhou Dianzi University"
