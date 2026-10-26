@@ -25,6 +25,12 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-redirect-from
+  - jekyll-relative-links
+
+# 按 Markdown 源文件的位置解析图片和附件的相对路径，包含 _posts。
+relative_links:
+  enabled: true
+  collections: true
 
 markdown: kramdown
 highlighter: rouge
@@ -49,3 +55,4 @@ exclude:
   - node_modules
   - .cache
   - 双击自动提交.bat
+  - 双击自动拉取.bat
