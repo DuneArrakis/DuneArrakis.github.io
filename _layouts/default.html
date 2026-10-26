@@ -1,8 +1,9 @@
 {% assign language = page.lang | default: site.lang %}
 {% assign t = site.data.translations[language] %}
 {% assign profile = site.data.academic.profile %}
-{% assign localized_profile = profile %}
-{% if language == 'en' %}{% assign localized_profile = site.data.academic_en.profile %}{% endif %}
+{% assign localized_academic = site.data.academic %}
+{% if language == 'en' %}{% assign localized_academic = site.data.academic_en %}{% endif %}
+{% assign localized_profile = localized_academic.profile %}
 <!doctype html>
 <html lang="{{ language }}">
 <head>
@@ -31,8 +32,8 @@
       <a class="site-brand" href="{{ t.home_url | relative_url }}">{{ profile.name | escape }}<span class="brand-dot">.</span></a>
       <nav class="site-nav" aria-label="{{ t.main_nav }}">
         <a href="{{ t.home_url | relative_url }}" {% if page.home %}aria-current="page"{% endif %}>{{ t.about_nav }}</a>
-        <a href="{{ t.home_url | append: '#research' | relative_url }}">{{ t.research_nav }}</a>
-        <a href="{{ t.home_url | append: '#publications' | relative_url }}">{{ t.publications_nav }}</a>
+        {% if localized_academic.research.size > 0 %}<a href="{{ t.home_url | append: '#research' | relative_url }}">{{ t.research_nav }}</a>{% endif %}
+        {% if localized_academic.publications.size > 0 %}<a href="{{ t.home_url | append: '#publications' | relative_url }}">{{ t.publications_nav }}</a>{% endif %}
         <a href="{{ '/archive/' | relative_url }}" {% if page.section == 'writing' or page.layout == 'post' %}aria-current="page"{% endif %}>{{ t.archive_nav }} <span class="nav-arrow" aria-hidden="true">↗</span></a>
       </nav>
       <nav class="language-switch" aria-label="{{ t.language_nav }}">

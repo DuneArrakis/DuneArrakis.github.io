@@ -19,22 +19,18 @@
   <ul class="news-list">{% for item in academic.news %}<li><span class="entry-period">{{ item.date | escape }}</span><div>{{ item.text | markdownify }}</div></li>{% endfor %}</ul>
 </section>
 {% endif %}
+{% if academic.research.size > 0 %}
 <section class="academic-section" id="research" aria-labelledby="research-title">
   <div class="section-heading"><h2 id="research-title">{{ t.research }}</h2><span>RESEARCH INTERESTS</span></div>
-  {% if academic.research.size > 0 %}
   <div class="research-list">{% for item in academic.research %}<article class="research-item"><span class="entry-number">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span><div><h3>{{ item.title | escape }}</h3><div class="entry-description">{{ item.description | markdownify }}</div>{% if item.keywords.size > 0 %}<ul class="keyword-list">{% for keyword in item.keywords %}<li>{{ keyword | escape }}</li>{% endfor %}</ul>{% endif %}</div></article>{% endfor %}</div>
-  {% else %}
-  <div class="empty-state"><span class="empty-mark" aria-hidden="true">01 /</span><div><h3>{{ t.research_empty_title }}</h3><p>{{ t.research_empty_text }}</p></div><span class="status-label">{{ t.pending }}</span></div>
-  {% endif %}
 </section>
+{% endif %}
+{% if academic.publications.size > 0 %}
 <section class="academic-section" id="publications" aria-labelledby="publications-title">
   <div class="section-heading"><h2 id="publications-title">{{ t.publications }}</h2><span>PUBLICATIONS</span></div>
-  {% if academic.publications.size > 0 %}
   <ol class="publication-list">{% for item in academic.publications %}<li><span class="entry-period">{{ item.year | escape }}</span><article><h3>{{ item.title | escape }}</h3><p class="publication-authors">{{ item.authors | escape }}</p><p class="publication-venue">{{ item.venue | escape }}{% if item.note.size > 0 %}<span class="publication-note"> · {{ item.note | escape }}</span>{% endif %}</p>{% include entry-links.html links=item.links %}</article></li>{% endfor %}</ol>
-  {% else %}
-  <div class="empty-state"><span class="empty-mark" aria-hidden="true">02 /</span><div><h3>{{ t.publications_empty_title }}</h3><p>{{ t.publications_empty_text }}</p></div><span class="status-label">{{ t.pending }}</span></div>
-  {% endif %}
 </section>
+{% endif %}
 {% if site.show_projects %}
 <section class="academic-section" id="projects" aria-labelledby="projects-title">
   <div class="section-heading"><h2 id="projects-title">{{ t.projects }}</h2><span>PROJECTS</span></div>

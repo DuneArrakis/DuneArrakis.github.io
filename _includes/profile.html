@@ -29,8 +29,8 @@
   <nav class="section-nav" aria-label="{{ t.page_nav }}">
     <span class="small-label">{{ t.page_nav }}</span>
     <a href="#about">{{ t.about }}</a>
-    <a href="#research">{{ t.research }}</a>
-    <a href="#publications">{{ t.publications }}</a>
+    {% if localized_academic.research.size > 0 %}<a href="#research">{{ t.research }}</a>{% endif %}
+    {% if localized_academic.publications.size > 0 %}<a href="#publications">{{ t.publications }}</a>{% endif %}
     {% if site.show_projects %}<a href="#projects">{{ t.projects }}</a>{% endif %}
     <a href="#experience">{{ t.experience }}</a>
     <a href="#writing">{{ t.writing }}</a>
