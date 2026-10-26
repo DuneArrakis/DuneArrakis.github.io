@@ -1,4 +1,13 @@
 <aside class="profile" aria-label="{{ t.profile_label }}">
+  {% unless page.home %}
+  <details class="profile-drawer" data-profile-drawer>
+    <summary class="profile-rail" aria-label="{{ t.profile_label }}">
+      {% if profile.avatar.size > 0 %}<img src="{{ profile.avatar | relative_url }}" alt="" width="40" height="40">{% endif %}
+      <span>{{ t.profile_label }}</span>
+      {% include icon.html name='arrow' %}
+    </summary>
+  {% endunless %}
+  <div class="profile-panel">
   <div class="profile-identity">
     {% if profile.avatar.size > 0 %}<img class="profile-avatar" src="{{ profile.avatar | relative_url }}" alt="{{ profile.name | escape }} — {{ t.avatar_alt }}" width="160" height="160">{% endif %}
     <div>
@@ -29,4 +38,6 @@
   {% else %}
   <div class="profile-back"><a href="{{ t.home_url | relative_url }}">{{ t.back_home }}</a><p>{{ t.back_note }}</p></div>
   {% endif %}
+  </div>
+  {% unless page.home %}</details>{% endunless %}
 </aside>

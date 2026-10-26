@@ -1,6 +1,32 @@
 (() => {
   "use strict";
 
+  const drawer = document.querySelector("[data-profile-drawer]");
+  if (drawer) {
+    const summary = drawer.querySelector("summary");
+    const panel = drawer.querySelector(".profile-panel");
+    drawer.addEventListener("pointerenter", (event) => {
+      if (event.pointerType === "mouse") drawer.open = true;
+    });
+    drawer.addEventListener("pointerleave", (event) => {
+      if (event.pointerType === "mouse" && !panel.contains(document.activeElement)) drawer.open = false;
+    });
+    drawer.addEventListener("focusout", () => {
+      requestAnimationFrame(() => {
+        if (!drawer.contains(document.activeElement) && !drawer.matches(":hover")) drawer.open = false;
+      });
+    });
+    document.addEventListener("click", (event) => {
+      if (!drawer.contains(event.target)) drawer.open = false;
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && drawer.open) {
+        drawer.open = false;
+        if (drawer.contains(document.activeElement)) summary.focus();
+      }
+    });
+  }
+
   // The complete archive is rendered by Jekyll; filtering is progressive enhancement.
   const filters = document.querySelector("[data-archive-filters]");
   if (filters) {

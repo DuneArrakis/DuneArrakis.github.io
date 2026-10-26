@@ -1,6 +1,6 @@
 # English homepage content. Contact links, avatar and names are shared with academic.yml.
 profile:
-  role: "PhD Student"
+  role: "Ph.D. Student"
   affiliation: "Hangzhou Dianzi University"
   location: "Hangzhou, China"
   intro: |
@@ -14,7 +14,7 @@ publications: []
 projects: []
 experience:
   - period: "2026.9 — Present"
-    title: "PhD Student in Cyberspace Security"
+    title: "Ph.D. Student in Cyberspace Security"
     institution: "Hangzhou Dianzi University"
     description: "School of Cyberspace"
   - period: "2022.9 — 2026.6"
