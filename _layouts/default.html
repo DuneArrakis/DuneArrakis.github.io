@@ -9,7 +9,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
+  {% if page.home %}
+  {% seo title=false %}
+  <title>{{ page.title | escape }}</title>
+  {% else %}
   {% seo %}
+  {% endif %}
   {% if page.home %}
   <link rel="alternate" hreflang="zh-CN" href="{{ '/' | absolute_url }}">
   <link rel="alternate" hreflang="en" href="{{ '/en/' | absolute_url }}">
