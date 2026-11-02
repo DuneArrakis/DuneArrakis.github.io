@@ -14,8 +14,6 @@ profile:
   cv: "" # 上传简历到 file/ 后填写，例如 /file/cv.pdf
   intro: |
     我是张洲滔，目前在杭州电子科技大学攻读网络空间安全博士学位。
-
-    这里记录我的学习、思考与日常。
   updating: false # 内容完善后改为 false，隐藏「主页内容持续完善中」
 
 # 最新动态按填写顺序展示；没有动态时整个栏目隐藏。
@@ -56,4 +54,4 @@ experience:
   - period: "2022.9 — 2026.6"
     title: "本科 · 网络空间安全"
     institution: "杭州电子科技大学"
-    description: "网络空间安全学院 · 卓越学院"
+    description: "卓越学院\n网络空间安全学院"

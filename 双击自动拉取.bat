@@ -1,5 +1,6 @@
 @echo off
 setlocal DisableDelayedExpansion
+rem Save this file as UTF-8 without BOM, with Windows CRLF line endings.
 chcp 65001 >nul
 title 拉取网站最新内容
 
