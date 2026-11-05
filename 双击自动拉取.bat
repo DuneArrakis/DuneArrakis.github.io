@@ -1,13 +1,12 @@
 @echo off
 setlocal DisableDelayedExpansion
-rem Save this file as UTF-8 without BOM, with Windows CRLF line endings.
-chcp 65001 >nul
-title 拉取网站最新内容
+rem Keep this script ASCII-only to avoid cmd.exe encoding issues.
+title Pull latest website updates
 
 pushd "%~dp0"
 if errorlevel 1 goto directory_error
 
-rem 优先使用 PATH 中的 Git，再查找常见安装位置。
+rem Find Git in PATH, then check common installation locations.
 set "GIT_EXE="
 for /f "delims=" %%G in ('where git.exe 2^>nul') do if not defined GIT_EXE set "GIT_EXE=%%G"
 if not defined GIT_EXE if exist "D:\Git\cmd\git.exe" set "GIT_EXE=D:\Git\cmd\git.exe"
@@ -22,38 +21,38 @@ if errorlevel 1 goto branch_error
 "%GIT_EXE%" rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" >nul 2>&1
 if errorlevel 1 goto upstream_error
 
-echo 正在拉取当前分支对应的远端更新……
-echo 本地修改如与远端冲突，Git 会停止更新，请按提示处理。
+echo Pulling updates for the current branch...
+echo Git will stop if updates conflict with local changes.
 echo.
 "%GIT_EXE%" -c rebase.autoStash=false -c merge.autoStash=false pull --ff-only --no-rebase
 if errorlevel 1 goto pull_error
 
 echo.
-echo 拉取完成，已同步远端更新。
+echo Pull completed successfully.
 popd
 pause
 exit /b 0
 
 :git_missing
-echo 未找到 Git，请安装 Git for Windows，并将 Git 加入 PATH。
+echo Git was not found. Install Git for Windows and add it to PATH.
 goto failed
 :repository_error
-echo 脚本所在目录不是 Git 仓库，请将脚本放在网站仓库中。
+echo This folder is not a Git repository. Place this script in the website repository.
 goto failed
 :branch_error
-echo 当前没有检出分支，请先切换到需要更新的分支。
+echo No branch is checked out. Switch to the branch you want to update.
 goto failed
 :upstream_error
-echo 当前分支没有关联远端分支，请先配置上游分支后再拉取。
+echo This branch has no upstream. Configure its upstream before pulling.
 goto failed
 :pull_error
 echo.
-echo 拉取未完成，请查看上方 Git 提示。
-echo 若提示本地修改冲突，请先提交或妥善保存修改；分支分叉需手动合并。
-echo 若连接失败，请检查网络、远端地址及 SSH 登录配置后重试。
+echo Pull failed. Please read the Git output above.
+echo For local conflicts, commit or save your changes first. Diverged branches need a manual merge.
+echo For connection errors, check your network, remote URL and SSH configuration.
 goto failed
 :directory_error
-echo 无法进入脚本所在目录。
+echo Cannot open the folder containing this script.
 pause
 exit /b 1
 :failed

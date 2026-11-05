@@ -1,25 +1,50 @@
 @echo off
-chcp 65001 >nul
+setlocal DisableDelayedExpansion
+rem Keep this script ASCII-only to avoid cmd.exe encoding issues.
+title Commit and push website updates
 
-set "GIT_BASH_PATH=D:\Git\bin\bash.exe"
+pushd "%~dp0"
+if errorlevel 1 goto directory_error
 
-:: 自动取脚本所在目录作为项目路径
-set "PROJECT_PATH=%~dp0"
+rem Find Git in PATH, then check common installation locations.
+set "GIT_EXE="
+for /f "delims=" %%G in ('where git.exe 2^>nul') do if not defined GIT_EXE set "GIT_EXE=%%G"
+if not defined GIT_EXE if exist "D:\Git\cmd\git.exe" set "GIT_EXE=D:\Git\cmd\git.exe"
+if not defined GIT_EXE if exist "%ProgramFiles%\Git\cmd\git.exe" set "GIT_EXE=%ProgramFiles%\Git\cmd\git.exe"
+if not defined GIT_EXE if exist "%LocalAppData%\Programs\Git\cmd\git.exe" set "GIT_EXE=%LocalAppData%\Programs\Git\cmd\git.exe"
+if not defined GIT_EXE goto git_missing
 
-cd /d "%PROJECT_PATH%" || (
-    echo 无法进入目录: "%PROJECT_PATH%"
-    pause
-    exit /b 1
-)
+"%GIT_EXE%" rev-parse --is-inside-work-tree >nul 2>&1
+if errorlevel 1 goto repository_error
 
-:: 路径转换
-set "UNIX_PATH=%PROJECT_PATH:\=/%"
-set "UNIX_PATH=%UNIX_PATH::=%"
-set "UNIX_PATH=/%UNIX_PATH%"
-:: 去掉末尾斜杠
-if "%UNIX_PATH:~-1%"=="/" set "UNIX_PATH=%UNIX_PATH:~0,-1%"
+"%GIT_EXE%" add -A
+if errorlevel 1 goto failed
+"%GIT_EXE%" diff --cached --quiet
+if errorlevel 2 goto failed
+if not errorlevel 1 goto push_changes
+"%GIT_EXE%" commit -m "auto commit"
+if errorlevel 1 goto failed
 
-echo 正在处理: %PROJECT_PATH%
-"%GIT_BASH_PATH%" -lc "cd '%UNIX_PATH%' && git add -A && if git diff --cached --quiet; then echo No changes to commit.; else git commit -m 'auto commit' && git push; fi"
-
+:push_changes
+"%GIT_EXE%" push
+if errorlevel 1 goto failed
+echo Commit and push completed successfully.
+popd
 pause
+exit /b 0
+
+:git_missing
+echo Git was not found. Install Git for Windows and add it to PATH.
+goto failed
+:repository_error
+echo This folder is not a Git repository. Place this script in the website repository.
+goto failed
+:directory_error
+echo Cannot open the folder containing this script.
+pause
+exit /b 1
+:failed
+echo Commit or push failed. Please read the output above.
+popd
+pause
+exit /b 1
