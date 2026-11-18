@@ -31,7 +31,9 @@
   <a class="skip-link" href="#main-content">{{ t.skip }}</a>
   <header class="site-header">
     <div class="header-inner">
+      {% unless page.home %}
       <a class="site-brand" href="{{ t.home_url | relative_url }}">{{ profile.name | escape }}<span class="brand-dot">.</span></a>
+      {% endunless %}
       <nav class="site-nav" aria-label="{{ t.main_nav }}">
         <a href="{{ t.home_url | relative_url }}" {% if page.home %}aria-current="page"{% endif %}>{{ t.about_nav }}</a>
         {% if localized_academic.research.size > 0 %}<a href="{{ t.home_url | append: '#research' | relative_url }}">{{ t.research_nav }}</a>{% endif %}

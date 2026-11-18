@@ -232,6 +232,9 @@ main { min-width: 0; overflow-wrap: anywhere; }
   .site-nav { gap: 20px; }
 }
 @media (max-width: 900px) {
+  .is-home .header-inner { display: flex; flex-wrap: wrap; gap: 0 16px; padding-block: 0; }
+  .is-home .site-nav { width: auto; flex-wrap: wrap; }
+  .is-home .language-switch { margin-inline-start: auto; }
   .header-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 16px; padding-top: 12px; }
   .site-brand { grid-column: 1; grid-row: 1; }
   .language-switch { grid-column: 2; grid-row: 1; }
