@@ -24,8 +24,10 @@
   <link rel="icon" href="{{ '/avatar.jpg' | relative_url }}" type="image/jpeg">
   <link rel="stylesheet" href="{{ '/assets/css/academic.css' | relative_url }}">
   <script defer src="{{ '/assets/js/academic.js' | relative_url }}"></script>
+  <script defer src="{{ '/assets/js/particle-field.js' | relative_url }}"></script>
 </head>
 <body class="{% if page.home %}is-home{% else %}is-inner{% endif %}">
+  <canvas class="particle-field" aria-hidden="true"></canvas>
   <a class="skip-link" href="#main-content">{{ t.skip }}</a>
   <header class="site-header">
     <div class="header-inner">
