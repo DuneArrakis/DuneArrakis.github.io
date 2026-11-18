@@ -22,6 +22,7 @@ body { isolation: isolate; }
   pointer-events: none;
 }
 .is-inner main { background: rgb(253 252 249 / 79%); }
+.is-inner main:has(> .post) { background-color: rgb(253 252 249 / 48%); }
 @media print, (forced-colors: active) { .particle-field { display: none; } }
 a { color: var(--blue); text-decoration: none; text-underline-offset: 4px; }
 a:hover { text-decoration: underline; }
