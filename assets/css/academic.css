@@ -21,6 +21,10 @@ body { isolation: isolate; }
   height: 100%;
   pointer-events: none;
 }
+/* Keep the field sized for the expanded screen while mobile browser bars slide. */
+@media (hover: none) {
+  .particle-field { height: 100lvh; }
+}
 .is-inner main { background: rgb(253 252 249 / 79%); }
 .is-inner main:has(> .post) { background-color: rgb(253 252 249 / 48%); }
 @media print, (forced-colors: active) { .particle-field { display: none; } }

@@ -12,9 +12,19 @@
     let pointer = null, lastTip = null, bend = null, cameraX = 0, cameraY = 0;
     let visible = false, reduced = false, dpr = 1;
     let selecting = false, textLeft = 0, textRight = 0;
-    let paper, pixelScale = 1, windowStart = 0, fastFrames = 0, missedFrames = 0, stableWindows = 0;
-    let triedFullResolution = false;
-    const frameBudget = 1000 / 120;
+    // Keep all three depths at each detail level. The pixel cap controls the
+    // cost of painting the full viewport; density controls simulation and paths.
+    const detail = [
+      { pixels: 360000, dpr: 0.85, density: 0.40 },
+      { pixels: 650000, dpr: 1, density: 0.65 },
+      { pixels: 1500000, dpr: 1.5, density: 1 }
+    ];
+    const modestDevice = navigator.hardwareConcurrency <= 4 || navigator.deviceMemory <= 4;
+    let level = (modestDevice || typeof document !== "undefined") ? 1 : 2;
+    let ceiling = modestDevice ? 1 : 2;
+    let paper, windowStart = 0, frames = 0, late = 0, fast = 0, veryFast = 0;
+    let busyMs = 0, lastDrawMs = 0, stableWindows = 0, slowWindows = 0, trial = false;
+    let frameBudget = 1000 / 60;
     const margin = 64;
 
     // Sample a looping, twisting ribbon once. Neighbouring particles follow its
@@ -127,7 +137,10 @@
           ctx.strokeStyle = colors[color];
           ctx.beginPath();
           let hasPath = false;
-          for (const p of layer.groups[color]) {
+          const group = layer.groups[color];
+          const count = Math.ceil(group.length * detail[level].density);
+          for (let i = 0; i < count; i++) {
+            const p = group[i];
             const within = textRight > textLeft ? Math.max(0, Math.min(1, (p.x + shiftX - textLeft) / 40, (textRight - p.x - shiftX) / 40)) : 0;
             const speed = p.speed * (1 - 0.62 * within);
             p.x += speed * dt;
@@ -197,8 +210,8 @@
     }
 
     function setResolution() {
-      const base = Math.min(dpr, 1.5, Math.sqrt(1500000 / (width * height)));
-      const next = base * pixelScale;
+      const quality = detail[level];
+      const next = Math.min(dpr, quality.dpr, Math.sqrt(quality.pixels / (width * height)));
       if (next === ratio && canvas.width === Math.round(width * next) && canvas.height === Math.round(height * next)) return;
       ratio = next;
       canvas.width = Math.round(width * ratio);
@@ -216,38 +229,57 @@
       paper = viewport.paper;
       if (!width || !height) return;
       if (changed) {
-        triedFullResolution = false;
-        pixelScale = 1;
         populate(Math.min(390, Math.max(80, Math.round(width * height / 3600))));
       }
       return setResolution();
     }
 
-    function trackCadence(now, interval) {
-      if (interval > 0 && interval <= frameBudget * 1.2) fastFrames++;
-      if (interval > frameBudget * 1.6) missedFrames++;
-      if (now - windowStart < 1000) return;
-      // Only tune after observing high-refresh callbacks. Ordinary 60 Hz
-      // screens and isolated long tasks should retain their full resolution.
-      if (fastFrames >= 12 && missedFrames >= 12 && pixelScale === 1) {
-        pixelScale = 0.8;
-        setResolution();
-      }
-      stableWindows = fastFrames >= 90 && missedFrames <= 2 ? stableWindows + 1 : 0;
-      if (pixelScale < 1 && stableWindows >= 12 && !triedFullResolution) {
-        triedFullResolution = true;
-        pixelScale = 1;
-        setResolution();
-      }
-      fastFrames = missedFrames = 0;
+    function resetWindow(now) {
       windowStart = now;
+      frames = late = fast = veryFast = busyMs = 0;
+    }
+
+    function trackCadence(now, interval, drawMs) {
+      if (interval <= 0) return;
+      frames++;
+      busyMs += drawMs;
+      if (interval < 12.5) fast++;
+      if (interval < 9.5) veryFast++;
+      if (interval > frameBudget * 1.45) late++;
+      if (now - windowStart < 1000) return;
+      if (veryFast >= 6) frameBudget = 1000 / 120;
+      else if (fast >= 6) frameBudget = Math.min(frameBudget, 1000 / 90);
+      const averageWork = busyMs / frames;
+      const meanInterval = (now - windowStart) / frames;
+      const overloaded = meanInterval > frameBudget * 1.22 || late > frames * 0.16 || averageWork > frameBudget * 0.55;
+      slowWindows = overloaded ? slowWindows + 1 : 0;
+      const stable = meanInterval <= frameBudget * 1.12 && late <= frames * 0.03 && averageWork < frameBudget * 0.28;
+      stableWindows = stable ? stableWindows + 1 : 0;
+      if (slowWindows >= 2 && level > 0) {
+        level--;
+        if (trial) ceiling = level;
+        trial = false;
+        slowWindows = stableWindows = 0;
+      } else if (stableWindows >= 12 && level < ceiling) {
+        level++;
+        trial = true;
+        stableWindows = 0;
+      } else if (stableWindows >= 12) {
+        trial = false;
+      }
+      resetWindow(now);
     }
 
     function tick(timestamp) {
       const now = timestamp + timeOffset;
       const interval = now - previous;
-      trackCadence(now, interval);
+      const oldLevel = level;
+      trackCadence(now, interval, lastDrawMs);
+      const started = performance.now();
+      // Resizing clears the canvas, so always draw in the same callback.
+      if (oldLevel !== level) setResolution();
       draw(Math.max(0, Math.min(interval, 50)) / 1000, now);
+      lastDrawMs = performance.now() - started;
       previous = now;
       frame = requestAnimationFrame(tick);
     }
@@ -277,8 +309,11 @@
         }
         draw(0, performance.now() + timeOffset);
       } else if (!frame) {
-        previous = windowStart = performance.now() + timeOffset;
-        fastFrames = missedFrames = stableWindows = 0;
+        previous = performance.now() + timeOffset;
+        resetWindow(previous);
+        frameBudget = 1000 / 60;
+        lastDrawMs = 0;
+        slowWindows = stableWindows = 0;
         draw(0, previous);
         frame = requestAnimationFrame(tick);
       } else if (resized) {
