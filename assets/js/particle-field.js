@@ -1,8 +1,169 @@
 (() => {
   "use strict";
 
-  function createField(canvas, ctx, timeOffset = 0) {
-    const colors = ["#2864df", "#009e91", "#00a9eb", "#f5a800", "#ff6053"];
+  const maxParticles = 390;
+
+  function canvasBrush(ctx) {
+    return {
+      kind: "2d",
+      resize(canvas, width, height) {
+        ctx.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
+        ctx.lineCap = "round";
+      },
+      clear(paper, width, height) {
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = paper;
+        ctx.fillRect(0, 0, width, height);
+      },
+      layer(layer) {
+        ctx.globalAlpha = layer.alpha;
+        ctx.lineWidth = layer.weight;
+      },
+      begin(color) {
+        ctx.strokeStyle = color.css;
+        ctx.beginPath();
+      },
+      mark(x, y, dx, dy) {
+        ctx.moveTo(x - dx, y - dy);
+        ctx.lineTo(x + dx, y + dy);
+      },
+      stroke() { ctx.stroke(); }
+    };
+  }
+
+  // One point sprite per brush mark. Only the bounding squares of the
+  // marks run the fragment shader, even when the marks are far apart.
+  function gpuBrush(gl) {
+    const program = gl.createProgram();
+    function attachShader(type, source) {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      gl.attachShader(program, shader);
+      gl.deleteShader(shader);
+    }
+    attachShader(gl.VERTEX_SHADER, `
+      attribute vec4 mark;
+      attribute vec4 ink;
+      attribute float radius;
+      uniform vec2 viewport;
+      uniform vec2 pixelScale;
+      varying mediump vec2 tip;
+      varying mediump vec4 color;
+      varying mediump float halfWidth;
+      varying mediump float size;
+      void main() {
+        vec2 clip = (mark.xy * pixelScale + 16.0) * 2.0 / viewport - 1.0;
+        gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
+        tip = mark.zw * pixelScale;
+        halfWidth = radius * pixelScale.x;
+        size = ceil(2.0 * (max(abs(tip.x), abs(tip.y)) + halfWidth + 1.0));
+        gl_PointSize = size;
+        color = ink;
+      }`);
+    attachShader(gl.FRAGMENT_SHADER, `
+      precision mediump float;
+      varying vec2 tip;
+      varying vec4 color;
+      varying float halfWidth;
+      varying float size;
+      void main() {
+        vec2 p = (gl_PointCoord - 0.5) * size;
+        float along = clamp(dot(p, tip) / max(dot(tip, tip), 0.0001), -1.0, 1.0);
+        float coverage = clamp(halfWidth + 0.5 - length(p - along * tip), 0.0, 1.0);
+        gl_FragColor = vec4(color.rgb, color.a * coverage);
+      }`);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error("Particle shader unavailable");
+    gl.useProgram(program);
+    const viewport = gl.getUniformLocation(program, "viewport");
+    const pixelScale = gl.getUniformLocation(program, "pixelScale");
+    const wordsPerMark = 6;
+    const vertices = new Float32Array(maxParticles * wordsPerMark);
+    const bytes = new Uint8Array(vertices.buffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, vertices.byteLength, gl.STREAM_DRAW);
+    function attribute(name, count, type, offset) {
+      const index = gl.getAttribLocation(program, name);
+      gl.enableVertexAttribArray(index);
+      gl.vertexAttribPointer(index, count, type, type === gl.UNSIGNED_BYTE, wordsPerMark * 4, offset);
+    }
+    attribute("mark", 4, gl.FLOAT, 0);
+    attribute("radius", 1, gl.FLOAT, 16);
+    attribute("ink", 4, gl.UNSIGNED_BYTE, 20);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    let paperColor, radius, offset = 0;
+    const rgba = new Uint8Array(4);
+    const packedColor = new Uint32Array(rgba.buffer);
+    const packedVertices = new Uint32Array(vertices.buffer);
+    return {
+      kind: "webgl",
+      resize(canvas, width, height) {
+        // Pad the clip volume so strokes crossing the edge stay visible
+        // until the whole mark leaves the screen.
+        gl.viewport(-16, -16, canvas.width + 32, canvas.height + 32);
+        gl.uniform2f(viewport, canvas.width + 32, canvas.height + 32);
+        gl.uniform2f(pixelScale, canvas.width / width, canvas.height / height);
+      },
+      clear(paper) {
+        if (paper !== paperColor) {
+          const sample = typeof OffscreenCanvas === "function" ? new OffscreenCanvas(1, 1) : document.createElement("canvas");
+          const swatch = sample.getContext("2d");
+          swatch.fillStyle = paper;
+          swatch.fillRect(0, 0, 1, 1);
+          const [r, g, b] = swatch.getImageData(0, 0, 1, 1).data;
+          gl.clearColor(r / 255, g / 255, b / 255, 1);
+          paperColor = paper;
+        }
+        offset = 0;
+        gl.clear(gl.COLOR_BUFFER_BIT);
+      },
+      layer(layer) {
+        rgba[3] = Math.round(layer.alpha * 255);
+        radius = layer.weight / 2;
+      },
+      begin({ rgb }) {
+        rgba[0] = rgb >> 16;
+        rgba[1] = rgb >> 8;
+        rgba[2] = rgb;
+      },
+      mark(x, y, dx, dy) {
+        vertices[offset++] = x;
+        vertices[offset++] = y;
+        vertices[offset++] = dx;
+        vertices[offset++] = dy;
+        vertices[offset++] = radius;
+        packedVertices[offset++] = packedColor[0];
+      },
+      finish() {
+        if (!offset) return;
+        gl.bufferSubData(gl.ARRAY_BUFFER, 0, bytes.subarray(0, offset * 4));
+        gl.drawArrays(gl.POINTS, 0, offset / wordsPerMark);
+      }
+    };
+  }
+
+  function createBrush(canvas, onContextLost, staticMode) {
+    const gl = !staticMode && canvas.getContext("webgl", {
+      alpha: false, depth: false, stencil: false, antialias: false,
+      powerPreference: "low-power", failIfMajorPerformanceCaveat: true
+    });
+    if (gl) {
+      // The longest near-field mark, including antialiasing, fits in 24 pixels.
+      if (gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)[1] < 24) return null;
+      const brush = gpuBrush(gl);
+      canvas.addEventListener("webglcontextlost", onContextLost, { once: true });
+      return brush;
+    }
+    const ctx = canvas.getContext("2d", { alpha: false });
+    return ctx && canvasBrush(ctx);
+  }
+
+  function createField(canvas, brush, timeOffset = 0) {
+    const colors = ["#2864df", "#009e91", "#00a9eb", "#f5a800", "#ff6053"].map(css => ({
+      css, rgb: parseInt(css.slice(1), 16)
+    }));
     const layers = [
       { depth: 0.14, speed: 13, length: 1.25, weight: 0.92, alpha: 0.36 },
       { depth: 0.48, speed: 29, length: 2.55, weight: 1.32, alpha: 0.65 },
@@ -15,13 +176,16 @@
     // Keep all three depths at each detail level. The pixel cap controls the
     // cost of painting the full viewport; density controls simulation and paths.
     const detail = [
+      { pixels: 230400, dpr: 0.75, density: 0.28 },
       { pixels: 360000, dpr: 0.85, density: 0.40 },
       { pixels: 650000, dpr: 1, density: 0.65 },
       { pixels: 1500000, dpr: 1.5, density: 1 }
     ];
     const modestDevice = navigator.hardwareConcurrency <= 4 || navigator.deviceMemory <= 4;
-    let level = (modestDevice || typeof document !== "undefined") ? 1 : 2;
-    let ceiling = modestDevice ? 1 : 2;
+    const minimumLevel = brush.kind === "2d" ? 0 : 1;
+    let ceiling = modestDevice ? 2 : 3;
+    let level = typeof document !== "undefined" ? Math.min(2, ceiling) : ceiling;
+    if (modestDevice && brush.kind === "2d") level = 1;
     let paper, windowStart = 0, frames = 0, late = 0, fast = 0, veryFast = 0;
     let busyMs = 0, lastDrawMs = 0, stableWindows = 0, slowWindows = 0, trial = false;
     let frameBudget = 1000 / 60;
@@ -123,19 +287,15 @@
       const period = Math.max(630, width * 1.32), anglePerPixel = Math.PI * 2 / period;
       // The fixed field already covers the paper. An opaque backing store can
       // be composited directly underneath the page.
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = paper;
-      ctx.fillRect(0, 0, width, height);
+      brush.clear(paper, width, height);
       for (const layer of layers) {
         const shiftX = cameraX * layer.depth, shiftY = cameraY * layer.depth;
         const phaseSpeed = 0.008 + 0.004 * layer.depth;
         const phase = (time * phaseSpeed) % 1;
         const waveSpeed = period * phaseSpeed;
-        ctx.lineWidth = layer.weight;
-        ctx.globalAlpha = layer.alpha;
+        brush.layer(layer);
         for (let color = 0; color < colors.length; color++) {
-          ctx.strokeStyle = colors[color];
-          ctx.beginPath();
+          brush.begin(colors[color]);
           let hasPath = false;
           const group = layer.groups[color];
           const count = Math.ceil(group.length * detail[level].density);
@@ -200,13 +360,13 @@
               p.lastSpeed = p.awake ? NaN : speed;
             }
             const tipX = p.tangentX * length, tipY = p.tangentY * length;
-            ctx.moveTo(px - tipX, py - tipY);
-            ctx.lineTo(px + tipX, py + tipY);
+            brush.mark(px, py, tipX, tipY);
             hasPath = true;
           }
-          if (hasPath) ctx.stroke();
+          if (hasPath) brush.stroke?.();
         }
       }
+      brush.finish?.();
     }
 
     function setResolution() {
@@ -216,8 +376,7 @@
       ratio = next;
       canvas.width = Math.round(width * ratio);
       canvas.height = Math.round(height * ratio);
-      ctx.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
-      ctx.lineCap = "round";
+      brush.resize(canvas, width, height);
       return true;
     }
 
@@ -229,7 +388,7 @@
       paper = viewport.paper;
       if (!width || !height) return;
       if (changed) {
-        populate(Math.min(390, Math.max(80, Math.round(width * height / 3600))));
+        populate(Math.min(maxParticles, Math.max(80, Math.round(width * height / 3600))));
       }
       return setResolution();
     }
@@ -255,7 +414,7 @@
       slowWindows = overloaded ? slowWindows + 1 : 0;
       const stable = meanInterval <= frameBudget * 1.12 && late <= frames * 0.03 && averageWork < frameBudget * 0.28;
       stableWindows = stable ? stableWindows + 1 : 0;
-      if (slowWindows >= 2 && level > 0) {
+      if (slowWindows >= 2 && level > minimumLevel) {
         level--;
         if (trial) ceiling = level;
         trial = false;
@@ -374,19 +533,39 @@
       flush();
     }
 
+    function replaceCanvas() {
+      const replacement = canvas.cloneNode(false);
+      canvas.replaceWith(replacement);
+      canvas = replacement;
+      transferred = false;
+    }
+
+    function recoverCanvas2D() {
+      send?.({ visible: false });
+      replaceCanvas();
+      const ctx = canvas.getContext("2d", { alpha: false });
+      send = ctx && createField(canvas, canvasBrush(ctx));
+      sync();
+    }
+
     function useMainThread() {
       clearTimeout(timeout);
       worker?.terminate();
       worker = null;
+      send = null;
       if (transferred) {
-        // A transferred element cannot acquire a new context.
-        const replacement = canvas.cloneNode(false);
-        canvas.replaceWith(replacement);
-        canvas = replacement;
-        transferred = false;
+        // A failed worker may already own the only context on the element.
+        recoverCanvas2D();
+        return;
       }
-      const ctx = canvas.getContext("2d", { alpha: false });
-      send = ctx && createField(canvas, ctx);
+      let brush;
+      try {
+        brush = createBrush(canvas, recoverCanvas2D, staticMode.matches);
+      } catch {
+        // An element with a failed WebGL program needs a fresh 2D surface.
+      }
+      if (!brush) return recoverCanvas2D();
+      send = createField(canvas, brush);
       sync();
     }
 
@@ -401,7 +580,7 @@
             try {
               const offscreen = canvas.transferControlToOffscreen();
               transferred = true;
-              worker.postMessage({ canvas: offscreen, timeOrigin: performance.timeOrigin }, [offscreen]);
+              worker.postMessage({ canvas: offscreen, timeOrigin: performance.timeOrigin, reduced: staticMode.matches }, [offscreen]);
             } catch {
               useMainThread();
             }
@@ -465,12 +644,18 @@
         update(data);
         return;
       }
-      const ctx = data.canvas.getContext("2d", { alpha: false });
-      if (!ctx) {
+      const canvas = data.canvas;
+      let brush;
+      try {
+        brush = createBrush(canvas, () => self.postMessage("unavailable"), data.reduced);
+      } catch {
+        // The page replaces a transferred canvas if its context cannot start.
+      }
+      if (!brush) {
         self.postMessage("unavailable");
         return;
       }
-      update = createField(data.canvas, ctx, performance.timeOrigin - data.timeOrigin);
+      update = createField(canvas, brush, performance.timeOrigin - data.timeOrigin);
       self.postMessage("ready");
     });
     self.postMessage(typeof requestAnimationFrame === "function" ? "supported" : "unavailable");
